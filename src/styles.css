@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    background-color: #303132;
+    margin: 0 !important;
+}
+
+* {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;   
+}
+
+mat-toolbar {
+    background-color: #4e4e4e !important;
+    height: 7vh;
+    color: rgb(255, 255, 255);
+    letter-spacing: 0.2em;
+    font-size: 1.5em;
+    margin: 0 !important;
+}
+
+
+@media (max-width: 800px) {
+    mat-toolbar {
+      height: 8vh;
+      font-size: 1.4em;
+    }
+  }
+
