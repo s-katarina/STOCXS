@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-main',
@@ -8,6 +9,10 @@ import { Component, OnInit } from '@angular/core';
 export class MainComponent implements OnInit {
 
   constructor() { }
+
+  selectedItems = new FormControl('')
+  cbItemsList: string[] = ['a', 'b', 'c']
+  
 
   ngOnInit(): void {
   }
