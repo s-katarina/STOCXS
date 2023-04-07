@@ -4,13 +4,13 @@ body {
 }
 
 * {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;   
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;    
 }
 
 mat-toolbar {
     background-color: #4e4e4e !important;
     height: 7vh;
-    color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255) !important;
     letter-spacing: 0.2em;
     font-size: 1.5em;
     margin: 0 !important;

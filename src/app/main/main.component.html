@@ -1,6 +1,19 @@
 
 
 <div class="flex-container-1">
-    <div class="flex-container-2-left"><button>GENERATE</button></div>
+    <div class="flex-container-2-left">
+        <mat-form-field appearance="fill">
+            <mat-label>Currencies</mat-label>
+            <mat-select [formControl]="selectedItems" multiple>
+              <!-- <mat-select-trigger>
+                {{selectedItems.value?.[0] || ''}}
+                <span *ngIf="(selectedItems.value?.length || 0) > 1" class="example-additional-selection">
+                  (+{{(selectedItems.value?.length || 0) - 1}} {{selectedItems.value?.length === 2 ? 'other' : 'others'}})
+                </span>
+              </mat-select-trigger> -->
+              <mat-option *ngFor="let i of cbItemsList" [value]="i">{{i}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
     <div class="flex-container-2-right"><h2>DATA</h2></div>
 </div>

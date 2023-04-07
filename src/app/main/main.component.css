@@ -20,3 +20,14 @@
 
 /* rozija roza #FF4085 */
 /* vise magenta roza #FF24BD */
+
+.flex-container-2-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.example-additional-selection {
+    opacity: 0.75;
+    font-size: 0.75em;
+}
