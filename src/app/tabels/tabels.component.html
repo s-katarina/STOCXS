@@ -1,0 +1,60 @@
+<p>tabels works!</p>
+<p>tabels works!</p>
+
+<mat-tab-group>
+    <mat-tab *ngFor="let table of tables.tables ">
+        <ng-template mat-tab-label>{{table.name}}</ng-template>
+        
+        <!-- <div *ngFor="let event of tab.content">
+            <event-thumbnail [eve]="event"></event-thumbnail>
+        </div>   -->
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="table.data">
+          
+              <!-- Position Column -->
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+              </ng-container>
+          
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Open </th>
+                <td mat-cell *matCellDef="let element"> {{element.open}} </td>
+              </ng-container>
+          
+              <!-- Weight Column -->
+              <ng-container matColumnDef="weight">
+                <th mat-header-cell *matHeaderCellDef> Close </th>
+                <td mat-cell *matCellDef="let element"> {{element.close}} </td>
+              </ng-container>
+          
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="symbol">
+                <th mat-header-cell *matHeaderCellDef> Lowest </th>
+                <td mat-cell *matCellDef="let element"> {{element.low}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="highest">
+                <th mat-header-cell *matHeaderCellDef> Highest </th>
+                <td mat-cell *matCellDef="let element"> {{element.high}} </td>
+              </ng-container>
+          
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          
+            <mat-paginator 
+                            [length]="length"
+                            [pageIndex]="currentPage"
+                            [pageSize]="pageSize"
+                           [pageSizeOptions]="[50, 100, 200]"
+                           showFirstLastButtons
+                           aria-label="Select page of periodic elements"
+                           (page)="handlePage($event)">
+            </mat-paginator>
+          </div>
+          
+    </mat-tab>
+</mat-tab-group>
+

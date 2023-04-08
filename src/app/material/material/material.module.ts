@@ -22,7 +22,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatBadgeModule } from "@angular/material/badge";
-
+import { MatTable } from '@angular/material/table';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 @NgModule({
@@ -75,7 +76,9 @@ import { MatBadgeModule } from "@angular/material/badge";
     MatSortModule,
     MatRippleModule,
     MatGridListModule,
-    MatBadgeModule
+    MatBadgeModule, 
+    MatTabsModule,
+    MatTable
   ],
 })
 export class MaterialModule {}
