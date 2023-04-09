@@ -7,54 +7,55 @@
             <mat-tab label="CRYPTOCURRENCIES"> 
               <form>
                 <mat-form-field class="currency-or-stocks-list" appearance="fill">
-                  <mat-chip-list #chipList>
+                  <mat-chip-list #currencyChipList>
                     <mat-chip
-                      *ngFor="let fruit of fruits"
-                      (removed)="remove(fruit)">
-                      {{fruit}}
+                      *ngFor="let c of selectedCurrencies"
+                      (removed)="removeCurrency(c)">
+                      {{c}}
                       <button matChipRemove>
                         <mat-icon>cancel</mat-icon>
                       </button>
                     </mat-chip>
                   </mat-chip-list>
-                  <input placeholder="Search" #fruitInput [formControl]="fruitCtrl"
-                    [matChipInputFor]="chipList" [matAutocomplete]="auto"
+                  <input placeholder="Search" #currencyInput [formControl]="currencyCtrl"
+                    [matChipInputFor]="currencyChipList" [matAutocomplete]="autocompleteCurr"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    (matChipInputTokenEnd)="add($event)"/>
-                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                    <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
-                      {{fruit}}
+                    (matChipInputTokenEnd)="addCurrency($event)"/>
+                  <mat-autocomplete #autocompleteCurr="matAutocomplete" (optionSelected)="selectedCurrency($event)">
+                    <mat-option *ngFor="let c of filteredCurrencies | async" [value]="c">
+                      {{c}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
               </form>
              </mat-tab>
+
             <mat-tab label="STOCKS">
             
               <form>
                 <mat-form-field class="currency-or-stocks-list" appearance="fill">
-                  <mat-chip-list #chipList>
+                  <mat-chip-list #stocksChipList>
                     <mat-chip
-                      *ngFor="let fruit of fruits"
-                      (removed)="remove(fruit)">
-                      {{fruit}}
+                      *ngFor="let s of selectedStocks"
+                      (removed)="removeStock(s)">
+                      {{s}}
                       <button matChipRemove>
                         <mat-icon>cancel</mat-icon>
                       </button>
                     </mat-chip>
                   </mat-chip-list>
-                  <input placeholder="Search" #fruitInput [formControl]="fruitCtrl"
-                    [matChipInputFor]="chipList" [matAutocomplete]="auto"
+                  <input placeholder="Search" #stockInput [formControl]="stockCtrl"
+                    [matChipInputFor]="stocksChipList" [matAutocomplete]="autocompleteStocks"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    (matChipInputTokenEnd)="add($event)"/>
-                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                    <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
-                      {{fruit}}
+                    (matChipInputTokenEnd)="addStock($event)"/>
+                  <mat-autocomplete #autocompleteStocks="matAutocomplete" (optionSelected)="selectedStock($event)">
+                    <mat-option *ngFor="let s of filteredStocks | async" [value]="s">
+                      {{s}}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
               </form>
-              
+
             </mat-tab>
         </mat-tab-group>
 

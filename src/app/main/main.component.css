@@ -41,7 +41,7 @@
 
 ::ng-deep.mat-autocomplete-panel
 {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(52, 52, 52);
   width: max-content;
 }
 
@@ -89,12 +89,16 @@
 }
 
 ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
-    color: black !important ;
+    color: rgb(54, 54, 54) !important ;
 }
 
-::ng-deep.mat-form-field-label {
-  color: rgb(255, 255, 255) !important;
+::ng-deep .mat-autocomplete-panel .mat-option.mat-selected:not(.mat-active):not(:hover) {
+  background: rgba(255, 255, 255, 0) !important;
 }
+
+/* ::ng-deep.mat-form-field-label {
+  color: rgb(255, 255, 255) !important;
+} */
 
 ::ng-deep .mat-expansion-indicator {
   visibility: hidden;
@@ -190,10 +194,10 @@
 
 ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
   border-color: #ffffff;
-  height: 22px;
-  width: 22px;
-  left: calc(50% - 11px); 
-  top: calc(50% - 11px); 
+  height: 12px;
+  width: 12px;
+  left: calc(50% - 7px); 
+  top: calc(50% - 7px); 
 }
 
 ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle, .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
@@ -242,3 +246,4 @@
   background-color: #FF24BD;
   color: black !important;
 }
+  

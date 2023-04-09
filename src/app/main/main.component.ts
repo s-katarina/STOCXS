@@ -14,18 +14,20 @@ import {MatChipInputEvent} from '@angular/material/chips';
 export class MainComponent implements OnInit {
 
   constructor() {
-    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+    this.filteredCurrencies = this.currencyCtrl.valueChanges.pipe(
       startWith(null),
-      map((fruit: string | null) => (fruit ? this._filter(fruit) : this.allFruits.slice())),
+      map((c: string | null) => (c ? this._filterCurr(c) : this.allCurrencies.slice())),
+    );
+    this.filteredStocks = this.stockCtrl.valueChanges.pipe(
+      startWith(null),
+      map((s: string | null) => (s ? this._filterStocks(s) : this.allStocks.slice())),
     );
    }
 
-  selectedItems = new FormControl('')
-  cbItemsList: string[] = ['a', 'b', 'c']
+  // TIME TOGGLE BUTTONS WITH PANEL
+
   panelOpenCondition = false
   selectedTimeToggleVal: string = '';
-
-  
 
   ngOnInit(): void {
     this.selectedTimeToggleVal = 'month'
@@ -40,45 +42,83 @@ export class MainComponent implements OnInit {
 
 // CHIPS 
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruitCtrl = new FormControl('');
-  filteredFruits: Observable<string[]>;
-  fruits: string[] = ['Lemon'];
-  allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry', 'sdf', 'sdfsdf', 'sdfsdfdsdddddddddddddddddddddddddd', 'sdfdsfsdfdfsdfd', 'dsfsdferw'];
 
-  @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement> | undefined;
+  currencyCtrl = new FormControl('');
+  filteredCurrencies: Observable<string[]>;
+  selectedCurrencies: string[] = ['BTC']
+  allCurrencies: string[] = ['BTC', 'ETHEREUM', 'DOGE COIN']
 
-  add(event: MatChipInputEvent): void {
+  stockCtrl = new FormControl('');
+  filteredStocks: Observable<string[]>;
+  selectedStocks: string[] = ['WAYSTAR']
+  allStocks: string[] = ['HP', 'UNILEVER', 'WAYSTAR']
+
+  @ViewChild('currencyInput') currencyInput: ElementRef<HTMLInputElement> | undefined;
+
+  addCurrency(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    // Add our fruit
-    if (value) {
-      this.fruits.push(value);
+    if (value && !this.selectedCurrencies.includes(value) && this.allCurrencies.includes(value)) {
+      this.selectedCurrencies.push(value);
     }
 
-    // Clear the input value
     event.chipInput!.clear();
 
-    this.fruitCtrl.setValue(null);
+    this.currencyCtrl.setValue(null);
   }
 
-  remove(fruit: string): void {
-    const index = this.fruits.indexOf(fruit);
+  removeCurrency(c: string): void {
+    const index = this.selectedCurrencies.indexOf(c);
 
     if (index >= 0) {
-      this.fruits.splice(index, 1);
+      this.selectedCurrencies.splice(index, 1);
     }
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.fruits.push(event.option.viewValue);
-    if (this.fruitInput != undefined) this.fruitInput.nativeElement.value = '';
-    this.fruitCtrl.setValue(null);
+  selectedCurrency(event: MatAutocompleteSelectedEvent): void {
+    if (!this.selectedCurrencies.includes(event.option.viewValue)) this.selectedCurrencies.push(event.option.viewValue);
+    if (this.currencyInput != undefined) this.currencyInput.nativeElement.value = '';
+    this.currencyCtrl.setValue(null);
   }
 
-  private _filter(value: string): string[] {
+  @ViewChild('stockInput') stockInput: ElementRef<HTMLInputElement> | undefined;
+
+  addStock(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    if (value && !this.selectedStocks.includes(value) && this.allStocks.includes(value)) {
+      this.selectedStocks.push(value);
+    }
+
+    event.chipInput!.clear();
+
+    this.stockCtrl.setValue(null);
+  }
+
+  removeStock(s: string): void {
+    const index = this.selectedStocks.indexOf(s);
+
+    if (index >= 0) {
+      this.selectedStocks.splice(index, 1);
+    }
+  }
+
+  selectedStock(event: MatAutocompleteSelectedEvent): void {
+    if (!this.selectedStocks.includes(event.option.viewValue)) this.selectedStocks.push(event.option.viewValue);
+    if (this.stockInput != undefined) this.stockInput.nativeElement.value = '';
+    this.stockCtrl.setValue(null);
+  }
+
+  private _filterCurr(value: string): string[] {
     const filterValue = value.toLowerCase();
 
-    return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
+    return this.allCurrencies.filter(c => c.toLowerCase().includes(filterValue));
+  }
+
+  private _filterStocks(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.allStocks.filter(c => c.toLowerCase().includes(filterValue));
   }
 
 
