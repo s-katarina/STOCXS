@@ -1,3 +1,5 @@
+import { MatTableDataSource } from "@angular/material/table"
+
 export interface Cripto {
     open: String
     high: String
@@ -10,6 +12,10 @@ export interface Cripto {
 export interface TableData {
     name: String
     data: Cripto[]
+    length: number
+    currentPage: number
+    pageSize: number
+    dataSource: MatTableDataSource<Cripto>
 }
 
 export interface Tables {

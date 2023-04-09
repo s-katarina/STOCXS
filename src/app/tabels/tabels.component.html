@@ -9,33 +9,33 @@
             <event-thumbnail [eve]="event"></event-thumbnail>
         </div>   -->
         <div class="mat-elevation-z8">
-            <table mat-table [dataSource]="table.data">
+            <table mat-table [dataSource]="table.dataSource">
           
               <!-- Position Column -->
-              <ng-container matColumnDef="position">
+              <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef> Date </th>
                 <td mat-cell *matCellDef="let element"> {{element.date}} </td>
               </ng-container>
           
               <!-- Name Column -->
-              <ng-container matColumnDef="name">
+              <ng-container matColumnDef="open">
                 <th mat-header-cell *matHeaderCellDef> Open </th>
                 <td mat-cell *matCellDef="let element"> {{element.open}} </td>
               </ng-container>
           
               <!-- Weight Column -->
-              <ng-container matColumnDef="weight">
+              <ng-container matColumnDef="close">
                 <th mat-header-cell *matHeaderCellDef> Close </th>
                 <td mat-cell *matCellDef="let element"> {{element.close}} </td>
               </ng-container>
           
               <!-- Symbol Column -->
-              <ng-container matColumnDef="symbol">
+              <ng-container matColumnDef="low">
                 <th mat-header-cell *matHeaderCellDef> Lowest </th>
                 <td mat-cell *matCellDef="let element"> {{element.low}} </td>
               </ng-container>
 
-              <ng-container matColumnDef="highest">
+              <ng-container matColumnDef="high">
                 <th mat-header-cell *matHeaderCellDef> Highest </th>
                 <td mat-cell *matCellDef="let element"> {{element.high}} </td>
               </ng-container>
@@ -45,13 +45,13 @@
             </table>
           
             <mat-paginator 
-                            [length]="length"
-                            [pageIndex]="currentPage"
-                            [pageSize]="pageSize"
-                           [pageSizeOptions]="[50, 100, 200]"
+                            [length]="table.length"
+                            [pageIndex]="table.currentPage"
+                            [pageSize]="table.pageSize"
+                           [pageSizeOptions]="[10, 50, 100]"
                            showFirstLastButtons
                            aria-label="Select page of periodic elements"
-                           (page)="handlePage($event)">
+                           (page)="handlePage(table, $event)">
             </mat-paginator>
           </div>
           

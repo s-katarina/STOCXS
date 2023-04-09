@@ -20,11 +20,9 @@ export class TabelsComponent implements OnInit {
   tables: Tables = {
     tables: []
   }
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = ['date', 'open', 'close', 'low', 'high'];
   dataSource = new MatTableDataSource<TableData>(this.tables.tables);
-  public currentPage = 0;
-  public pageSize:number = 50;
-  public length:number = 0;
+
 
   ngOnInit(): void {
     this.tryAddingData()
@@ -32,7 +30,13 @@ export class TabelsComponent implements OnInit {
   }
 
   tryAddingData(): void {
-    this.tables.tables.push({name: "probica", data:[]})
+    this.tables.tables.push({
+      name: "probica", data: [],
+      length: 0,
+      currentPage: 0,
+      pageSize: 0,
+      dataSource: new MatTableDataSource<Cripto>()
+    })
     this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM&apikey=");
 
   }
@@ -57,9 +61,16 @@ export class TabelsComponent implements OnInit {
           data.push(cripro);
         }
 
-        this.tables.tables.push({ name: name, data: data });
+        const newTable = {
+          name: name, data: data,
+          length: data.length,
+          currentPage: 0,
+          pageSize: 10,
+          dataSource: new MatTableDataSource<Cripto>(data)
+        };
+        newTable.dataSource.paginator = this.paginator
+        this.tables.tables.push(newTable);
         console.log(this.tables);
-        this.length = data.length;
       },
       (err: any) => {
         console.log(err);
@@ -72,17 +83,17 @@ export class TabelsComponent implements OnInit {
     // return new Observable<1>;
   }
 
-  public handlePage(event?:any) {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
-    // this.pageIteration();
+  public handlePage(table:TableData, event?:any) {
+    table.currentPage = event.pageIndex;
+    table.pageSize = event.pageSize;
+    this.pageIteration(table);
   }
 
-  // private pageIteration() {
-  //   const end = (this.currentPage + 1) * this.pageSize;
-  //   const start = this.currentPage * this.pageSize;
-  //   const part = this.rides.slice(start, end);
-  //   this.dataSource = new MatTableDataSource<Ride>(part);
-  // }
+  private pageIteration(table:TableData) {
+    const end = (table.currentPage + 1) * table.pageSize;
+    const start = table.currentPage * table.pageSize;
+    const part = table.data.slice(start, end);
+    table.dataSource = new MatTableDataSource<Cripto>(part);
+  }
 
 }
