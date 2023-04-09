@@ -10,13 +10,15 @@ body {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;    
 } */
 
-mat-toolbar {
+.mat-toolbar {
     background-color: #828080 !important;
     height: 7vh;
     color: rgb(255, 255, 255) !important;
     letter-spacing: 0.2em;
     font-size: 1.5em;
     margin: 0 !important;
+    pointer-events: none;
+    user-select: none;
 }
 
 

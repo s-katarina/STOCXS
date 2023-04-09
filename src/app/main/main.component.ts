@@ -5,6 +5,7 @@ import {map, startWith} from 'rxjs/operators';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-main',
@@ -13,7 +14,13 @@ import {MatChipInputEvent} from '@angular/material/chips';
 })
 export class MainComponent implements OnInit {
 
-  constructor() {
+  // private apiKey: string = "GMPIPV9NPUDTC3J9s"
+  private allStocksAddress: string = "https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=GMPIPV9NPUDTC3J9s";
+
+  constructor(private http: HttpClient) {
+
+    this.getAllStocks()
+
     this.filteredCurrencies = this.currencyCtrl.valueChanges.pipe(
       startWith(null),
       map((c: string | null) => (c ? this._filterCurr(c) : this.allCurrencies.slice())),
@@ -23,6 +30,22 @@ export class MainComponent implements OnInit {
       map((s: string | null) => (s ? this._filterStocks(s) : this.allStocks.slice())),
     );
    }
+
+   private getAllStocks() {
+    this.http.get(this.allStocksAddress, {responseType: 'text'}).subscribe((res:any) => {
+      let rows = res.split('\n')
+      let i = 0
+      for (let row of rows) {
+        i += 1
+        let columns = row.split(',')
+        if (i%17 == 0) this.allStocks.push(columns[1])
+      }
+      this.filteredStocks = this.stockCtrl.valueChanges.pipe(
+        startWith(null),
+        map((s: string | null) => (s ? this._filterStocks(s) : this.allStocks.slice())),
+      );
+    })
+  }
 
   // TIME TOGGLE BUTTONS WITH PANEL
 
@@ -50,8 +73,8 @@ export class MainComponent implements OnInit {
 
   stockCtrl = new FormControl('');
   filteredStocks: Observable<string[]>;
-  selectedStocks: string[] = ['WAYSTAR']
-  allStocks: string[] = ['HP', 'UNILEVER', 'WAYSTAR']
+  selectedStocks: string[] = ['AECOM', 'Team Inc']
+  allStocks: string[] = []
 
   @ViewChild('currencyInput') currencyInput: ElementRef<HTMLInputElement> | undefined;
 

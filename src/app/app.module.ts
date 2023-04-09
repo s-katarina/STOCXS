@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { MaterialModule } from './material/material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    ReactiveFormsModule 
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
