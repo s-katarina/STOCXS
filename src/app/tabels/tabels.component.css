@@ -21,4 +21,20 @@
 
 table {
     width: 100%;
+    overflow-x:auto;
+  }
+  th, tr {
+    min-width: 100px;
+  }
+
+  .scroll {
+    overflow-x:auto;
+
+  }
+  
+
+  @media (max-width: 500px){
+    .visibility {
+        display: none;
+    }
   }

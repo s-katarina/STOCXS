@@ -38,7 +38,7 @@ export class TabelsComponent implements OnInit {
       dataSource: new MatTableDataSource<Cripto>()
     })
     this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM&apikey=");
-
+    this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=BAC&apikey=");
   }
 
   private testGettingData(adress:string) {
