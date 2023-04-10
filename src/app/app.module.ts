@@ -9,12 +9,14 @@ import { MaterialModule } from './material/material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TabelsComponent } from './tabels/tabels.component'; 
 import { HttpClientModule } from '@angular/common/http';
+import { GraphComponent } from './graph/graph.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
-    TabelsComponent
+    TabelsComponent,
+    GraphComponent
   ],
   imports: [
     BrowserModule,
