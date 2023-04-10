@@ -1,19 +1,30 @@
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
+
 body {
-    background-color: #303132;
+    background-color: #4c4e4f;
     margin: 0 !important;
 }
 
+<<<<<<< HEAD
 * {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;    
 }
+=======
+/* * {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;    
+} */
+>>>>>>> origin/feature/parameter-components
 
-mat-toolbar {
-    background-color: #4e4e4e !important;
+.mat-toolbar {
+    background-color: #828080 !important;
     height: 7vh;
     color: rgb(255, 255, 255) !important;
     letter-spacing: 0.2em;
     font-size: 1.5em;
     margin: 0 !important;
+    pointer-events: none;
+    user-select: none;
 }
 
 
@@ -24,3 +35,6 @@ mat-toolbar {
     }
   }
 
+::ng-deep .material-icons{
+    font-family: 'Material Icons' !important;
+}

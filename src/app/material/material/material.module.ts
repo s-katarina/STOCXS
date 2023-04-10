@@ -24,7 +24,9 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatTable } from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
-
+import {MatExpansionModule} from '@angular/material/expansion';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [
@@ -50,7 +52,11 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatSelectModule,
     MatRippleModule,
     MatGridListModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatExpansionModule,
+    MatTabsModule,
+    MatChipsModule,
+    MatAutocompleteModule,
   ],
   exports: [
     MatButtonModule,
@@ -78,7 +84,10 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatGridListModule,
     MatBadgeModule, 
     MatTabsModule,
-    MatTable
+    MatTable,
+    MatExpansionModule,
+    MatChipsModule,
+    MatAutocompleteModule,
   ],
 })
 export class MaterialModule {}

@@ -2,18 +2,98 @@
 
 <div class="flex-container-1">
     <div class="flex-container-2-left">
-        <mat-form-field appearance="fill">
+
+        <mat-tab-group animationDuration="0ms">
+            <mat-tab label="CRYPTOCURRENCIES"> 
+              <form>
+                <mat-form-field class="currency-or-stocks-list" appearance="fill">
+                  <mat-chip-list #currencyChipList>
+                    <mat-chip
+                      *ngFor="let c of selectedCurrencies"
+                      (removed)="removeCurrency(c)">
+                      {{c}}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip>
+                  </mat-chip-list>
+                  <input placeholder="Search" #currencyInput [formControl]="currencyCtrl"
+                    [matChipInputFor]="currencyChipList" [matAutocomplete]="autocompleteCurr"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addCurrency($event)"/>
+                  <mat-autocomplete #autocompleteCurr="matAutocomplete" (optionSelected)="selectedCurrency($event)">
+                    <mat-option *ngFor="let c of filteredCurrencies | async" [value]="c">
+                      {{c}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </form>
+             </mat-tab>
+
+            <mat-tab label="STOCKS">
+            
+              <form>
+                <mat-form-field class="currency-or-stocks-list" appearance="fill">
+                  <mat-chip-list #stocksChipList>
+                    <mat-chip
+                      *ngFor="let s of selectedStocks"
+                      (removed)="removeStock(s)">
+                      {{s}}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip>
+                  </mat-chip-list>
+                  <input placeholder="Search" #stockInput [formControl]="stockCtrl"
+                    [matChipInputFor]="stocksChipList" [matAutocomplete]="autocompleteStocks"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addStock($event)"/>
+                  <mat-autocomplete #autocompleteStocks="matAutocomplete" (optionSelected)="selectedStock($event)">
+                    <mat-option *ngFor="let s of filteredStocks | async" [value]="s">
+                      {{s}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </form>
+
+            </mat-tab>
+        </mat-tab-group>
+
+
+        <!-- <mat-form-field appearance="fill">
             <mat-label>Currencies</mat-label>
             <mat-select [formControl]="selectedItems" multiple>
-              <!-- <mat-select-trigger>
+              <mat-select-trigger>
                 {{selectedItems.value?.[0] || ''}}
                 <span *ngIf="(selectedItems.value?.length || 0) > 1" class="example-additional-selection">
                   (+{{(selectedItems.value?.length || 0) - 1}} {{selectedItems.value?.length === 2 ? 'other' : 'others'}})
                 </span>
               </mat-select-trigger> -->
-              <mat-option *ngFor="let i of cbItemsList" [value]="i">{{i}}</mat-option>
+              <!-- <mat-option *ngFor="let i of cbItemsList" [value]="i">{{i}}</mat-option>
             </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
+        
+
+        <mat-expansion-panel [disabled]="true" [expanded]="panelOpenCondition" >
+            <mat-expansion-panel-header>
+                <!-- [value]="selectedTimeToggleVal" (change)="onTimeToggleValChange(group.value)" -->
+                <mat-button-toggle-group #group="matButtonToggleGroup" name="timeFrame" aria-label="TimeFrame" value="month" (change)="onTimeToggleValChange(group.value)">
+                    <mat-button-toggle value="month">Monthly</mat-button-toggle>
+                    <mat-button-toggle value="week">Weekly</mat-button-toggle>
+                    <mat-button-toggle value="day">Daily</mat-button-toggle>
+                </mat-button-toggle-group>
+            </mat-expansion-panel-header>
+            <mat-radio-group value="60">
+                <mat-radio-button value="60">1 hour</mat-radio-button>
+                <mat-radio-button value="30">30 minutes</mat-radio-button>
+                <mat-radio-button value="15">15 minutes</mat-radio-button>
+                <mat-radio-button value="5">5 minutes</mat-radio-button>
+                <mat-radio-button value="1">1 minute</mat-radio-button>
+              </mat-radio-group>
+        </mat-expansion-panel>
+
+        <button mat-raised-button id="generateButton">VIEW DATA</button>
+
     </div>
     <div class="flex-container-2-right"><h2>DATA</h2></div>
 </div>
