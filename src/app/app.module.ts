@@ -10,13 +10,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TabelsComponent } from './tabels/tabels.component'; 
 import { HttpClientModule } from '@angular/common/http';
 import { GraphComponent } from './graph/graph.component';
+import { CanvasJSChart } from 'assets/canvasjs.angular.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
     TabelsComponent,
-    GraphComponent
+    GraphComponent,
+    CanvasJSChart
   ],
   imports: [
     BrowserModule,

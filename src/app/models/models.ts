@@ -21,3 +21,9 @@ export interface TableData {
 export interface Tables {
     tables: TableData[]
 }
+
+export interface GraphData {
+    xData: Array<any>
+    yData: Array<any>
+    name: string
+}
