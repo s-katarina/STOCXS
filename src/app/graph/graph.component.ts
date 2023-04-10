@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GraphData } from 'app/models/models';
 import * as CanvasJSAngularChart from '../../assets/canvasjs.angular.component';
@@ -9,36 +9,46 @@ import * as CanvasJSAngularChart from '../../assets/canvasjs.angular.component';
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.css']
 })
-export class GraphComponent implements OnInit {
+export class GraphComponent implements OnInit{
 
   graph?: CanvasJSAngularChart.CanvasJSChart
   chartOptions: any = {}
 
+  interval: string = ""
+  type: string = ""
+  links: Array<string> = []
+
+  @Input() subject: any 
+
   constructor(private http: HttpClient) { }
 
+  // async ngOnChanges(changes: SimpleChanges): Promise<void> {
+  //   console.log(changes)
+  //   if (changes["interval"])
+  //     this.interval = changes["interval"].currentValue
+  //   if (changes["type"])
+  //     this.type = changes["type"].currentValue
+  //   if (changes["links"])
+  //     this.links = changes["links"].currentValue
+  //   await this.fun()
+  // }
+
   async ngOnInit(): Promise<void> {
-    // this.getDataFromAPI().subscribe((res: any) => {
-    //   let parsed = this.parseAPIResponse(res, "crypto")
-    //   console.log(parsed)
-    //   let arr: Array<GraphData> = []
-    //   arr.push(parsed)
-    //   this.fillGraph(arr, "monthly")
-      
-    // },
-    // (err: any) => {
-    //   console.log(err)
-    // })
+    this.subject.subscribe((res: any) => {
+      this.interval = res["interval"]
+      this.type = res["type"]
+      this.links = res["links"]
+    })
+    this.fun()
+  }
 
-    let res1: any = await this.getDataFromAPI("https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=BTC&market=CNY&apikey=demo").toPromise()
-    let res2: any = await this.getDataFromAPI("https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=ETH&market=CNY&apikey=FQMG54Q117RDF93U").toPromise()
-    // let res3: any = await this.getDataFromAPI("https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=BTC&market=CNY&apikey=FQMG54Q117RDF93U").toPromise()
-
+  async fun() {
     let arr: Array<GraphData> = []
-    arr.push(this.parseAPIResponse(res1, "crypto"))
-    arr.push(this.parseAPIResponse(res2, "crypto"))
-    // arr.push(this.parseAPIResponse(res3, "crypto"))
-
-    this.fillGraph(arr, "monthly")
+    for (let link of this.links) {
+      let res: any = await this.getDataFromAPI(link).toPromise()
+      arr.push(this.parseAPIResponse(res, this.type))
+    }
+    this.fillGraph(arr, this.interval)
   }
 
   getDataFromAPI(address: string) {
@@ -111,8 +121,8 @@ export class GraphComponent implements OnInit {
         cursor: "pointer",
         itemclick: this.toogleDataSeries
       },
-      // theme: "light1",
-      backgroundColor: "#f5f5f5",
+      theme: "dark1",
+      // backgroundColor: "#f5f5f5",
       title: {
         text: title
       },

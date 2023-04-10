@@ -79,5 +79,10 @@
         <button mat-raised-button id="generateButton" (click)="onViewDataClick()">VIEW DATA</button>
 
     </div>
-    <div class="flex-container-2-right"><h2>DATA</h2></div>
+    <div class="flex-container-2-right">
+      <div style="margin-bottom: 50px;">
+        <canvasjs-chart [options]="chartOptions"></canvasjs-chart>  
+      </div>
+      <app-tabels></app-tabels>
+    </div>
 </div>

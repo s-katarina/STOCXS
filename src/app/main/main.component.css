@@ -2,38 +2,49 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 6vw;
-    margin-left: 8vw;
-    margin-right: 8vw;
+    margin-top: 6vw;
+    padding: 0 3vw;
+    align-items: flex-start;
+    /* width: 100vw; */
+  }
+
+  .flex-container-2-right {
+    width: 100%;
+    margin-left: 5vw;
+    column-gap: 100px;
+  }
+
+  .flex-container-2-left {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 50px;
+    /* width: 30%; */
   }
   
   @media (max-width: 900px) {
     .flex-container-1 {
         flex-direction: column;
         justify-content: space-evenly;
-        margin: 10vw;
-        margin-left: 8vw;
-        margin-right: 8vw;
+        padding: 10vw;
+        /* margin-left: 8vw;
+        margin-right: 8vw; */
         row-gap: 2vh;
+    }
+
+    .flex-container-2-left {
+      /* width: 30%; */
+    }
+
+    .flex-container-2-right {
+      margin-left: 0;
     }
   }
 
 /* rozija roza #FF4085 */
 /* vise magenta roza #FF24BD */
 
-.flex-container-2-left {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-content: stretch;
-}
-
-@media (min-width: 900px) {
-  .flex-container-2-left {
-    max-width: 30vw;
-  }
-}
 .example-additional-selection {
     opacity: 0.75;
     font-size: 0.75em;
@@ -140,7 +151,7 @@
 ::ng-deep .mat-button-toggle {
   border: 0 !important;
   border-radius: 4px !important;
-  width: 6vw;
+  /* width: 6vw; */
   margin: 4px;
 }
 
@@ -214,10 +225,12 @@
 }
 
 #generateButton {
-  margin: 4vw;
-  margin-left: 5vw;
-  margin-right: 5vw;
-  height: 7vh;
+  margin-top: 4vw auto;
+  /* margin-left: 5vw;
+  margin-right: 5vw; */
+  /* height: 7vh; */
+  padding: 10px;
+  /* width: 70%; */
   font-size: 1.1em;
   letter-spacing: 0.2em;
   color: black;
@@ -225,8 +238,11 @@
 
 @media (max-width: 900px) {
   ::ng-deep #generateButton {
-    margin: 7vw !important;
-    height: 8.5vh !important;
+    margin-top: 7vw;
+    width: 30%;
+    /* max-width: 150px; */
+    min-width: 150px;
+    /* height: 8.5vh !important; */
   }
 }
 /* 
