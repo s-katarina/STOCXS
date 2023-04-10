@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -6,13 +6,14 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
 import { HttpClient } from '@angular/common/http';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterViewInit {
 
   private apiKey: string = "demo"
   private allStocksAddress: string = "https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=demo";
@@ -32,6 +33,9 @@ export class MainComponent implements OnInit {
     );
     this.dayIntervalCtrl.setValue('60')
    }
+   
+  ngAfterViewInit(): void {
+  }
 
    private getAllStocks() {
     this.http.get(this.allStocksAddress, {responseType: 'text'}).subscribe((res:any) => {
@@ -70,7 +74,14 @@ export class MainComponent implements OnInit {
   }
 
   // TABS
+  
   @ViewChild('tabGroup') tabGroup: any;
+  @Output() selectedTabChange: EventEmitter<MatTabChangeEvent> | undefined
+  
+  tabChanged(): void {
+    if (this.selectedTimeToggleVal === 'day' && this.tabGroup.selectedIndex === 0) this.panelOpenCondition = false
+    else if (this.selectedTimeToggleVal === 'day' && this.tabGroup.selectedIndex === 1) this.panelOpenCondition = true
+  }
 
   // TIME TOGGLE BUTTONS WITH PANEL
 
@@ -83,7 +94,7 @@ export class MainComponent implements OnInit {
 
   public onTimeToggleValChange(val: string) {
     this.selectedTimeToggleVal = val;
-    if (this.selectedTimeToggleVal == 'day') this.panelOpenCondition = true
+    if (this.selectedTimeToggleVal == 'day' && this.tabGroup.selectedIndex === 1) this.panelOpenCondition = true
     else this.panelOpenCondition = false
   }
 

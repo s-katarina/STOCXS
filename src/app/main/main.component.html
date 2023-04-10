@@ -3,7 +3,7 @@
 <div class="flex-container-1">
     <div class="flex-container-2-left">
 
-        <mat-tab-group #tabGroup animationDuration="0ms">
+        <mat-tab-group #tabGroup animationDuration="0ms" (selectedTabChange)="tabChanged()">
             <mat-tab label="CRYPTOCURRENCIES"> 
               <form>
                 <mat-form-field class="currency-or-stocks-list" appearance="fill">
