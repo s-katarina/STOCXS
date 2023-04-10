@@ -14,12 +14,13 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MainComponent implements OnInit {
 
-  // private apiKey: string = "GMPIPV9NPUDTC3J9s"
-  private allStocksAddress: string = "https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=GMPIPV9NPUDTC3J9s";
+  private apiKey: string = "demo"
+  private allStocksAddress: string = "https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=demo";
 
   constructor(private http: HttpClient) {
 
     this.getAllStocks()
+    this.getAllCryptos()
 
     this.filteredCurrencies = this.currencyCtrl.valueChanges.pipe(
       startWith(null),
@@ -29,6 +30,7 @@ export class MainComponent implements OnInit {
       startWith(null),
       map((s: string | null) => (s ? this._filterStocks(s) : this.allStocks.slice())),
     );
+    this.dayIntervalCtrl.setValue('60')
    }
 
    private getAllStocks() {
@@ -39,6 +41,7 @@ export class MainComponent implements OnInit {
         i += 1
         let columns = row.split(',')
         if (i%17 == 0) this.allStocks.push(columns[1])
+        this.stocksSymbolMap.set(columns[1], columns[0])
       }
       this.filteredStocks = this.stockCtrl.valueChanges.pipe(
         startWith(null),
@@ -46,6 +49,28 @@ export class MainComponent implements OnInit {
       );
     })
   }
+
+  private getAllCryptos() {
+    this.http.get("./assets/digital_currency_list.csv", {responseType: 'text'}).subscribe((res:any) => {
+      let rows: string[] = res.split('\n')
+      for (let i = 1; i < rows.length ; ++i ) {
+        let columns = rows[i].split(',')
+        if (columns.length > 1) {
+          let c = columns[1].trim()
+          this.allCurrencies.push(c)
+          this.currencySymbolMap.set(c, columns[0])
+        }
+      }
+      this.filteredCurrencies = this.currencyCtrl.valueChanges.pipe(
+        startWith(null),
+        map((s: string | null) => (s ? this._filterCurr(s) : this.allCurrencies.slice())),
+      );
+    })
+
+  }
+
+  // TABS
+  @ViewChild('tabGroup') tabGroup: any;
 
   // TIME TOGGLE BUTTONS WITH PANEL
 
@@ -62,19 +87,25 @@ export class MainComponent implements OnInit {
     else this.panelOpenCondition = false
   }
 
+  // DAY INTERVAL RADIO BUTTONS
+  dayIntervalCtrl = new FormControl();
+
 
 // CHIPS 
+
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
   currencyCtrl = new FormControl('');
   filteredCurrencies: Observable<string[]>;
-  selectedCurrencies: string[] = ['BTC']
-  allCurrencies: string[] = ['BTC', 'ETHEREUM', 'DOGE COIN']
+  selectedCurrencies: string[] = ['Bitcoin', 'Ethereum']
+  allCurrencies: string[] = []
+  currencySymbolMap: Map<string, string> = new Map<string, string>()
 
   stockCtrl = new FormControl('');
   filteredStocks: Observable<string[]>;
   selectedStocks: string[] = ['AECOM', 'Team Inc']
   allStocks: string[] = []
+  stocksSymbolMap: Map<string, string> = new Map<string, string>()
 
   @ViewChild('currencyInput') currencyInput: ElementRef<HTMLInputElement> | undefined;
 
@@ -142,6 +173,57 @@ export class MainComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.allStocks.filter(c => c.toLowerCase().includes(filterValue));
+  }
+
+  public onViewDataClick() {
+
+    let apiPaths: string[] = []
+    
+    if (this.tabGroup.selectedIndex === 0) {
+      for (let c of this.selectedCurrencies) {
+        let sym = this.currencySymbolMap.get(c)
+        if (sym != undefined) apiPaths.push(this.buildApiPath(true, sym))
+      }
+    }
+    else {
+      for (let s of this.selectedStocks) {
+        let sym = this.stocksSymbolMap.get(s)
+        if (sym != undefined) apiPaths.push(this.buildApiPath(false, sym))
+      }
+    }
+
+    for (let p of apiPaths) {
+      console.log(p)
+    }
+
+
+  }
+
+  private buildApiPath(isCrypto: boolean, symbol: string) {
+    let basePath = 'https://www.alphavantage.co/query?function='
+    let func = 'TIME_SERIES'
+    if (isCrypto === true) func = 'DIGITAL_CURRENCY'
+    let timeFrame = ''
+    let market = 'CNY'
+    let interv = ''
+    
+    switch(this.selectedTimeToggleVal) {
+      case 'month':
+        timeFrame = 'MONTHLY'
+        break
+      case 'week':
+        timeFrame = 'WEEKLY'
+        break
+      case 'day':
+        if (isCrypto === true) timeFrame = 'DAILY'
+        else {
+          timeFrame = 'INTRADAY'
+          interv = '&interval=' + this.dayIntervalCtrl.value + 'min'
+        }
+        break
+    }
+
+    return basePath+func+'_'+timeFrame+'&symbol='+symbol+interv+'&market='+market+'&apikey='+this.apiKey
   }
 
 
