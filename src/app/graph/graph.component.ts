@@ -111,7 +111,8 @@ export class GraphComponent implements OnInit {
         cursor: "pointer",
         itemclick: this.toogleDataSeries
       },
-      theme: "dark2",
+      // theme: "light1",
+      backgroundColor: "#f5f5f5",
       title: {
         text: title
       },
