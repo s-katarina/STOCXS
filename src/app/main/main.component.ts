@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -8,7 +8,10 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import { HttpClient } from '@angular/common/http';
 import { tick } from '@angular/core/testing';
 import * as CanvasJSAngularChart from '../../assets/canvasjs.angular.component';
-import { GraphData } from 'app/models/models';
+import { Cripto, GraphData, TableData, Tables } from 'app/models/models';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-main',
@@ -16,14 +19,15 @@ import { GraphData } from 'app/models/models';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  // private apiKey: string = "FQMG54Q117RDF93U"
-  private apiKey: string = "X009DI1MYVSAXSKU"
-  private allStocksAddress: string = "https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=" + this.apiKey;
+  private apiKey: string = "FQMG54Q117RDF93U"
+  private apiKey2: string = "X009DI1MYVSAXSKU"
+  private allStocksAddress: string = "https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=demo";
 
-  public intervalProp: string = ""
-  public typeProp: string = ""
-  public linksProp: string[] = []
+  // public intervalProp: string = ""
+  // public typeProp: string = ""
+  // public linksProp: string[] = []
 
   sub = new BehaviorSubject({})
 
@@ -33,9 +37,14 @@ export class MainComponent implements OnInit, AfterViewInit {
   interval: string = "monthly"
   type: string = "crypto"
   links: Array<string> = [
-    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=BTC&market=CNY&apikey=X009DI1MYVSAXSKU",
-    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=ETH&market=CNY&apikey=X009DI1MYVSAXSKU"
+    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=BTC&market=CNY&apikey=" + this.apiKey,
+    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=ETH&market=CNY&apikey=" + this.apiKey
   ]
+
+  tables: Tables = {
+    tables: []
+  }
+  displayedColumns: string[] = ['date', 'open', 'close', 'low', 'high'];
 
   constructor(private http: HttpClient) {
 
@@ -52,9 +61,11 @@ export class MainComponent implements OnInit, AfterViewInit {
     );
     this.dayIntervalCtrl.setValue('60')
    }
+
   ngAfterViewInit(): void {
     // this.onViewDataClick()
     this.fun()
+    this.drawTable()
   }
 
    private getAllStocks() {
@@ -94,7 +105,14 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   // TABS
+  
   @ViewChild('tabGroup') tabGroup: any;
+  @Output() selectedTabChange: EventEmitter<MatTabChangeEvent> | undefined
+  
+  tabChanged(): void {
+    if (this.selectedTimeToggleVal === 'day' && this.tabGroup.selectedIndex === 0) this.panelOpenCondition = false
+    else if (this.selectedTimeToggleVal === 'day' && this.tabGroup.selectedIndex === 1) this.panelOpenCondition = true
+  }
 
   // TIME TOGGLE BUTTONS WITH PANEL
 
@@ -107,7 +125,7 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   public onTimeToggleValChange(val: string) {
     this.selectedTimeToggleVal = val;
-    if (this.selectedTimeToggleVal == 'day') this.panelOpenCondition = true
+    if (this.selectedTimeToggleVal == 'day' && this.tabGroup.selectedIndex === 1) this.panelOpenCondition = true
     else this.panelOpenCondition = false
   }
 
@@ -237,14 +255,24 @@ export class MainComponent implements OnInit, AfterViewInit {
       this.interval = "monthly"
     else if (this.selectedTimeToggleVal == "week")
       this.interval = "weekly"
-    else if (this.selectedTimeToggleVal == "day" && this.typeProp == "crypto")
+    else if (this.selectedTimeToggleVal == "day" && this.type == "crypto") {
+      console.log("aasd")
       this.interval = "daily"
+    }
     else
       this.interval = "intraday"
 
     this.fun()
 
-    this.sub.next(obj)
+    this.drawTable()
+  }
+
+  drawTable() {
+    this.tables = {tables:[]}
+    for (let link of this.links) {
+      let address: string = link.replace(this.apiKey, this.apiKey2)
+      this.testGettingData(address)
+    }
   }
 
   private buildApiPath(isCrypto: boolean, symbol: string) {
@@ -339,7 +367,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   fillGraph(data: Array<GraphData>, interval: string) {
-
+    console.log(interval)
     let format: string = ""
     if (interval == "monthly")
       format = "MMM"
@@ -415,6 +443,126 @@ export class MainComponent implements OnInit, AfterViewInit {
   getDateFromString(str: string) {
     let tokens: Array<string> = str.split("-")
     return new Date(Number(tokens[0]), Number(tokens[1]), Number(tokens[2]))
+  }
+
+
+
+
+
+
+  tryAddingData(): void {
+    this.tables.tables.push({
+      name: "probica", data: [],
+      length: 0,
+      currentPage: 0,
+      pageSize: 0,
+      dataSource: new MatTableDataSource<Cripto>()
+    })
+    this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM&apikey=X009DI1MYVSAXSKU");
+    this.testGettingData("https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=BTC&market=CNY&apikey=demo");
+  }
+
+  private testGettingData(adress:string) {
+    this.getData(adress).subscribe(
+      (res: any) => {
+        console.log(res);
+        if (adress.includes("TIME_SERIES")) this.extractCompany(res);
+        else this.extactValutes(res)
+      },
+      (err: any) => {
+        console.log(err);
+      }
+    );
+  }
+  extactValutes(res: any) {
+    let name: string = res["Meta Data"]["2. Digital Currency Code"] + "";
+    console.log(name);
+    let data = [];
+    let keyForData: string = '';
+    for (let key in res) {
+      if (key.includes('Time Series'))
+        keyForData = key;
+    }
+    console.log(keyForData);
+    for (let row in res[keyForData]) {
+      let apiReturnValue = res[keyForData][row];
+      let cripro: Cripto = {
+        open: Number(apiReturnValue["1b. open (USD)"]).toFixed(2),
+        high: Number(apiReturnValue["2b. high (USD)"]).toFixed(2),
+        low: Number(apiReturnValue["3b. low (USD)"]).toFixed(2),
+        close: Number(apiReturnValue["4b. close (USD)"]).toFixed(2),
+        volume: apiReturnValue["5. volume"],
+        date: row + ""
+      };
+      data.push(cripro);
+    }
+    const newTable = {
+      name: name,
+      data: data,
+      length: data.length,
+      currentPage: 0,
+      pageSize: 10,
+      dataSource: new MatTableDataSource<Cripto>(data)
+    };
+    newTable.dataSource.paginator = this.paginator;
+    this.tables.tables.push(newTable);
+    this.pageIteration(newTable);
+    console.log(this.tables);
+  }
+
+  private extractCompany(res: any) {
+    let name: string = res["Meta Data"]["2. Symbol"] + "";
+    console.log(name);
+    let data = [];
+    let keyForData: string = '';
+    for (let key in res) {
+      if (key.includes('Time Series'))
+        keyForData = key;
+    }
+    console.log(keyForData);
+    for (let row in res[keyForData]) {
+      let apiReturnValue = res[keyForData][row];
+      let cripro: Cripto = {
+        open: Number(apiReturnValue["1. open"]).toFixed(2),
+        high: Number(apiReturnValue["2. high"]).toFixed(2),
+        low: Number(apiReturnValue["3. low"]).toFixed(2),
+        close: Number(apiReturnValue["4. close"]).toFixed(2),
+        volume: apiReturnValue["5. volume"],
+        date: row + ""
+      };
+      data.push(cripro);
+    }
+
+    const newTable = {
+      name: name,
+      data: data,
+      length: data.length,
+      currentPage: 0,
+      pageSize: 10,
+      dataSource: new MatTableDataSource<Cripto>(data)
+    };
+    newTable.dataSource.paginator = this.paginator;
+    this.tables.tables.push(newTable);
+    this.pageIteration(newTable);
+    console.log(this.tables);
+  }
+
+  public getData(address: string): Observable<any> {
+    return this.http.get(address);
+    // return new Observable<1>;
+  }
+
+  public handlePage(table:TableData, event?:any) {
+    table.currentPage = event.pageIndex;
+    table.pageSize = event.pageSize;
+    this.pageIteration(table);
+  }
+
+  private pageIteration(table:TableData) {
+    const end = (table.currentPage + 1) * table.pageSize;
+    const start = table.currentPage * table.pageSize;
+    const part = table.data.slice(start, end);
+    table.dataSource = new MatTableDataSource<Cripto>(part);
   }
 
 
