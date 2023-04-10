@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
+
+body {
+    background-color: #282C31;
+    margin: 0 !important;
+}
+
+
+.mat-toolbar {
+    background-color: #1a1c20 !important;
+    height: 7vh;
+    color: rgb(255, 255, 255) !important;
+    letter-spacing: 0.2em;
+    font-size: 1.5em;
+    margin: 0 !important;
+    pointer-events: none;
+    user-select: none;
+}
+
+
+@media (max-width: 800px) {
+    mat-toolbar {
+      height: 8vh;
+      font-size: 1.4em;
+    }
+  }
+
+::ng-deep .material-icons{
+    font-family: 'Material Icons' !important;
+}

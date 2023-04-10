@@ -1,0 +1,53 @@
+* Styles for tab labels */
+.mat-tab-label {
+    width: 25px !important;
+    background-color: rgb(255, 0, 85);
+    color: rgb(255, 0, 85);
+    font-weight: 700;
+}
+
+/* Styles for the active tab label */
+.mat-tab-label.mat-tab-label-active {
+    width: 25px !important;
+    background-color: #FF24BD;
+    color: black !important;;
+    font-weight: 600;
+}
+
+::ng-deep .mat-ink-bar {
+  background-color: #FF24BD !important;
+}
+
+::ng-deep .mat-tab-header {
+  vertical-align: text-top;
+}
+
+::ng-deep .mat-tab-label-active.mat-focus-indicator {
+  background-color: #FF24BD;
+  color: black !important;
+}
+
+
+
+table {
+    width: 100%;
+    overflow-x:auto;
+  }
+  tr, th {
+    min-width: 100px;
+  }
+
+  tr:nth-child(even) {background-color: #f5f5f5;}
+
+  .scroll {
+    overflow-x:auto;
+    background-color: aqua;
+
+  }
+  
+
+  @media (max-width: 500px){
+    .visibility {
+        display: none;
+    }
+  }
