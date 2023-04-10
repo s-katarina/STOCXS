@@ -78,10 +78,15 @@
 
         <button mat-raised-button id="generateButton" (click)="onViewDataClick()">VIEW DATA</button>
 
+        <div class="error-container" *ngIf="status != ''">
+          <mat-spinner *ngIf="loading"></mat-spinner>
+          <p>{{status}}</p>
+        </div>
+
     </div>
     <div class="flex-container-2-right">
       <div style="margin-bottom: 50px;">
-        <canvasjs-chart [options]="chartOptions"></canvasjs-chart>  
+        <canvasjs-chart [options]="chartOptions" (chartInstance)="getChart($event)"></canvasjs-chart>  
       </div>
       
       <mat-tab-group>

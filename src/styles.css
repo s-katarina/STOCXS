@@ -2,22 +2,13 @@
 
 
 body {
-    background-color: #4c4e4f;
+    background-color: #282C31;
     margin: 0 !important;
 }
 
-<<<<<<< HEAD
-* {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;    
-}
-=======
-/* * {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif !important;    
-} */
->>>>>>> origin/feature/parameter-components
 
 .mat-toolbar {
-    background-color: #828080 !important;
+    background-color: #1a1c20 !important;
     height: 7vh;
     color: rgb(255, 255, 255) !important;
     letter-spacing: 0.2em;

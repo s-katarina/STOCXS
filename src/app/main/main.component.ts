@@ -46,6 +46,10 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
   displayedColumns: string[] = ['date', 'open', 'close', 'low', 'high'];
 
+  status: string = ""
+  loading: boolean = false
+  error: boolean = false
+
   constructor(private http: HttpClient) {
 
     this.getAllStocks()
@@ -219,6 +223,10 @@ export class MainComponent implements OnInit, AfterViewInit {
 
   public onViewDataClick() {
 
+    this.loading = true
+    this.error = false
+    this.status = "Loading data"
+
     let apiPaths: string[] = []
     
     if (this.tabGroup.selectedIndex === 0) {
@@ -265,9 +273,20 @@ export class MainComponent implements OnInit, AfterViewInit {
     this.fun()
 
     this.drawTable()
+
+    this.loading = false
+    if (this.error)
+      this.status = "Could not get requested data. Please wait and try again."
+    else
+      this.status = ""
   }
 
   drawTable() {
+    if (this.error) {
+      this.status = "Could not get requested data. Please wait and try again."
+      return
+    }
+
     this.tables = {tables:[]}
     for (let link of this.links) {
       let address: string = link.replace(this.apiKey, this.apiKey2)
@@ -309,17 +328,37 @@ export class MainComponent implements OnInit, AfterViewInit {
 
 
 
-
+  getChart(chart: any) {
+    console.log("jadkjashdkja")
+    console.log(chart)
+    chart.render()
+  }
 
 
   async fun() {
+    if (this.error) {
+      this.status = "Could not get requested data. Please wait and try again."
+      return
+    }
+      
     let arr: Array<GraphData> = []
     for (let link of this.links) {
       let res: any = await this.getDataFromAPI(link).toPromise()
+      if (res["Note"]) {
+        this.loading = false
+        this.error = true
+        this.status = "Could not get requested data. Please wait and try again."
+        return
+      }
+      if (res["Error Message"]) {
+        this.loading = false
+        this.error = true
+        this.status = "Could not get requested data. No available data."
+        return
+      }
       arr.push(this.parseAPIResponse(res, this.type))
     }
     this.fillGraph(arr, this.interval)
-    console.log("asd")
   }
 
   getDataFromAPI(address: string) {
@@ -392,7 +431,7 @@ export class MainComponent implements OnInit, AfterViewInit {
         cursor: "pointer",
         itemclick: this.toogleDataSeries
       },
-      theme: "dark1",
+      theme: "light1",
       // backgroundColor: "#f5f5f5",
       title: {
         text: title
@@ -470,12 +509,13 @@ export class MainComponent implements OnInit, AfterViewInit {
         else this.extactValutes(res)
       },
       (err: any) => {
+        this.status = "NO data available for this apis"
         console.log(err);
       }
     );
   }
   extactValutes(res: any) {
-    let name: string = res["Meta Data"]["2. Digital Currency Code"] + "";
+    let name: string = res["Meta Data"]["2. Digital Currency Code"] + " (USD)";
     console.log(name);
     let data = [];
     let keyForData: string = '';
@@ -511,7 +551,7 @@ export class MainComponent implements OnInit, AfterViewInit {
   }
 
   private extractCompany(res: any) {
-    let name: string = res["Meta Data"]["2. Symbol"] + "";
+    let name: string = res["Meta Data"]["2. Symbol"] + " (USD)";
     console.log(name);
     let data = [];
     let keyForData: string = '';

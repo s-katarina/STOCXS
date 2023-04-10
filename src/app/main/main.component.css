@@ -72,7 +72,7 @@
 
 ::ng-deep .mat-form-field.currency-or-stocks-list {
   margin-top: 2vh;
-  width: 30vw;
+  width: 100%;
   border-radius: 4px !important;
 }
 
@@ -94,6 +94,8 @@
   margin-top: 4vh;
   margin-bottom: 3vh;
 }
+
+::ng-deep .mat-form-field.currency-or-stocks-list input {color: white;}
 
 ::ng-deep .mat-pseudo-checkbox-checked {
   background-color: #FF24BD !important;
@@ -245,10 +247,10 @@
     /* height: 8.5vh !important; */
   }
 }
-/* 
-::ng-deep .mat-tab-label {
+
+::ng-deep .mat-tab-label-content {
   color: white;
-} */
+}
 
 ::ng-deep .mat-ink-bar {
   background-color: #FF24BD !important;
@@ -311,7 +313,6 @@ table {
 
   .scroll {
     overflow-x:auto;
-    background-color: aqua;
 
   }
   
@@ -322,4 +323,21 @@ table {
     }
   }
 
+
+  .error-container {
+    background-color: white;
+    width: 100%;
+    padding: 10px 20px 10px 20px;
+    background-color: #ff75d598;
+    border: 1px solid #b42323;
+    font-size: 0.9em;
+    margin-top: 20px;
+    border-radius: 5px;
+  }
+
+  .error-container p {
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+  }
   

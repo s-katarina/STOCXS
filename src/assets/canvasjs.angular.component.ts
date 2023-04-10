@@ -55,6 +55,8 @@ class CanvasJSChart implements AfterViewInit, OnChanges, OnDestroy {
 			this.chart.render();
 			this.shouldUpdateChart = false;
 			this.prevChartOptions = this.options;
+			console.log("u changes")
+			this.chartInstance.emit(this.chart)
 		}
 	}
 	
