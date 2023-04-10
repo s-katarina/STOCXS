@@ -30,9 +30,12 @@ export class MainComponent implements OnInit, AfterViewInit {
   graph?: CanvasJSAngularChart.CanvasJSChart
   chartOptions: any = {}
 
-  interval: string = ""
-  type: string = ""
-  links: Array<string> = []
+  interval: string = "monthly"
+  type: string = "crypto"
+  links: Array<string> = [
+    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=BTC&market=CNY&apikey=X009DI1MYVSAXSKU",
+    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=ETH&market=CNY&apikey=X009DI1MYVSAXSKU"
+  ]
 
   constructor(private http: HttpClient) {
 
@@ -51,6 +54,7 @@ export class MainComponent implements OnInit, AfterViewInit {
    }
   ngAfterViewInit(): void {
     // this.onViewDataClick()
+    this.fun()
   }
 
    private getAllStocks() {
