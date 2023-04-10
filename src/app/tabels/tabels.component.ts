@@ -21,12 +21,10 @@ export class TabelsComponent implements OnInit {
     tables: []
   }
   displayedColumns: string[] = ['date', 'open', 'close', 'low', 'high'];
-  dataSource = new MatTableDataSource<TableData>(this.tables.tables);
 
 
   ngOnInit(): void {
     this.tryAddingData()
-    this.dataSource.paginator = this.paginator;
   }
 
   tryAddingData(): void {
@@ -38,7 +36,7 @@ export class TabelsComponent implements OnInit {
       dataSource: new MatTableDataSource<Cripto>()
     })
     this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM&apikey=");
-    this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=BAC&apikey=");
+    this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=BAC&apikey=");
   }
 
   private testGettingData(adress:string) {
@@ -48,13 +46,18 @@ export class TabelsComponent implements OnInit {
         let name: string = res["Meta Data"]["2. Symbol"] + "";
         console.log(name);
         let data = [];
-        for (let row in res["Monthly Time Series"]) {
-          let apiReturnValue = res["Monthly Time Series"][row + ""];
+        let keyForData:string = ''
+        for (let key in res){
+          if (key.includes('Time Series')) keyForData = key
+        }
+        console.log(keyForData)
+        for (let row in res[keyForData]) {
+          let apiReturnValue = res[keyForData][row];
           let cripro: Cripto = {
-            open: apiReturnValue["1. open"],
-            high: apiReturnValue["2. high"],
-            low: apiReturnValue["3. low"],
-            close: apiReturnValue["4. close"],
+            open: Number(apiReturnValue["1. open"]).toFixed(2),
+            high: Number(apiReturnValue["2. high"]).toFixed(2),
+            low: Number(apiReturnValue["3. low"]).toFixed(2),
+            close: Number(apiReturnValue["4. close"]).toFixed(2),
             volume: apiReturnValue["5. volume"],
             date: row + ""
           };
@@ -62,7 +65,8 @@ export class TabelsComponent implements OnInit {
         }
 
         const newTable = {
-          name: name, data: data,
+          name: name, 
+          data: data,
           length: data.length,
           currentPage: 0,
           pageSize: 10,
