@@ -35,51 +35,91 @@ export class TabelsComponent implements OnInit {
       pageSize: 0,
       dataSource: new MatTableDataSource<Cripto>()
     })
-    this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM&apikey=demo");
-    this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=BAC&apikey=demo");
+    this.testGettingData("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM&apikey=X009DI1MYVSAXSKU");
+    this.testGettingData("https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=BTC&market=CNY&apikey=demo");
   }
 
   private testGettingData(adress:string) {
     this.getData(adress).subscribe(
       (res: any) => {
         console.log(res);
-        let name: string = res["Meta Data"]["2. Symbol"] + "";
-        console.log(name);
-        let data = [];
-        let keyForData:string = ''
-        for (let key in res){
-          if (key.includes('Time Series')) keyForData = key
-        }
-        console.log(keyForData)
-        for (let row in res[keyForData]) {
-          let apiReturnValue = res[keyForData][row];
-          let cripro: Cripto = {
-            open: Number(apiReturnValue["1. open"]).toFixed(2),
-            high: Number(apiReturnValue["2. high"]).toFixed(2),
-            low: Number(apiReturnValue["3. low"]).toFixed(2),
-            close: Number(apiReturnValue["4. close"]).toFixed(2),
-            volume: apiReturnValue["5. volume"],
-            date: row + ""
-          };
-          data.push(cripro);
-        }
-
-        const newTable = {
-          name: name, 
-          data: data,
-          length: data.length,
-          currentPage: 0,
-          pageSize: 10,
-          dataSource: new MatTableDataSource<Cripto>(data)
-        };
-        newTable.dataSource.paginator = this.paginator
-        this.tables.tables.push(newTable);
-        console.log(this.tables);
+        if (adress.includes("TIME_SERIES")) this.extractCompany(res);
+        else this.extactValutes(res)
       },
       (err: any) => {
         console.log(err);
       }
     );
+  }
+  extactValutes(res: any) {
+    let name: string = res["Meta Data"]["2. Digital Currency Code"] + "";
+    console.log(name);
+    let data = [];
+    let keyForData: string = '';
+    for (let key in res) {
+      if (key.includes('Time Series'))
+        keyForData = key;
+    }
+    console.log(keyForData);
+    for (let row in res[keyForData]) {
+      let apiReturnValue = res[keyForData][row];
+      let cripro: Cripto = {
+        open: Number(apiReturnValue["1b. open (USD)"]).toFixed(2),
+        high: Number(apiReturnValue["2b. high (USD)"]).toFixed(2),
+        low: Number(apiReturnValue["3b. low (USD)"]).toFixed(2),
+        close: Number(apiReturnValue["4b. close (USD)"]).toFixed(2),
+        volume: apiReturnValue["5. volume"],
+        date: row + ""
+      };
+      data.push(cripro);
+    }
+    const newTable = {
+      name: name,
+      data: data,
+      length: data.length,
+      currentPage: 0,
+      pageSize: 10,
+      dataSource: new MatTableDataSource<Cripto>(data)
+    };
+    newTable.dataSource.paginator = this.paginator;
+    this.tables.tables.push(newTable);
+    console.log(this.tables);
+  }
+
+  private extractCompany(res: any) {
+    let name: string = res["Meta Data"]["2. Symbol"] + "";
+    console.log(name);
+    let data = [];
+    let keyForData: string = '';
+    for (let key in res) {
+      if (key.includes('Time Series'))
+        keyForData = key;
+    }
+    console.log(keyForData);
+    for (let row in res[keyForData]) {
+      let apiReturnValue = res[keyForData][row];
+      let cripro: Cripto = {
+        open: Number(apiReturnValue["1. open"]).toFixed(2),
+        high: Number(apiReturnValue["2. high"]).toFixed(2),
+        low: Number(apiReturnValue["3. low"]).toFixed(2),
+        close: Number(apiReturnValue["4. close"]).toFixed(2),
+        volume: apiReturnValue["5. volume"],
+        date: row + ""
+      };
+      data.push(cripro);
+    }
+
+    const newTable = {
+      name: name,
+      data: data,
+      length: data.length,
+      currentPage: 0,
+      pageSize: 10,
+      dataSource: new MatTableDataSource<Cripto>(data)
+    };
+    newTable.dataSource.paginator = this.paginator;
+    this.tables.tables.push(newTable);
+    console.log(this.tables);
   }
 
   public getData(address: string): Observable<any> {
