@@ -23,13 +23,13 @@ Project is created with:
 
 ## Setup
 
-Clone repository and run npm install to install dependencies.
-Alpha vantage API key is required for gathering data. Free key available at https://www.alphavantage.co/. Ket
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/main`. 
+1. Clone repository and run npm install to install dependencies.
+2. Alpha vantage API key is required for gathering data. Free key available at https://www.alphavantage.co/.
+3. Run `ng serve` for a dev server. Navigate to `http://localhost:4200/main`. 
 
 
 ## Credits
 
-* Milos Stojanovic [github link](https://github.com/miloss01)
-* Selena Milutin [github link](https://github.com/SelenaMilutin)
-* Katarina Spremic [github link](https://github.com/s-katarina)
+* Milos Stojanovic ([github link](https://github.com/miloss01))
+* Selena Milutin ([github link](https://github.com/SelenaMilutin))
+* Katarina Spremic ([github link](https://github.com/s-katarina))
